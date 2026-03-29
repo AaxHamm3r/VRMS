@@ -10,28 +10,20 @@
 # All code was reviewed, tested, and modified by the student.
 
 import tkinter as tk
-from idlelib.debugger_r import frametable
 from tkinter import messagebox
 import mysql.connector
 
 # -------------------------------
 # DATABASE CONNECTION
 # -------------------------------
-def connect_db(username, password, database, host):
-    Connection = mysql.connector.connect(
-        host=host,
-        user=username,
-        password=password,
-        database=database
+def connect_db():
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",        
+        password="Unocard123!",
+        database="VRMS",
     )
-
-    if Connection.is_connected():
-        print("Connected to Database: " + Connection.database.title())
-        return Connection;
-    else:
-        print("Failed to connect to Database: " + database)
-        return None
-
+print("Connected to database successfully")  
 
 # -------------------------------
 # INSERT VEHICLE FUNCTION
@@ -116,121 +108,11 @@ def get_agreements():
     except Exception as e:
         messagebox.showerror("Database Error", str(e))
 
-def login(loginWindow):
-    username = loginWindow.usernameEntry.get()
-    password = loginWindow.passwordEntry.get()
-
-    Connection = connect_db(username, password, "driveeasyrentals", "LocalHost")
-    if Connection.is_connected():
-        showWindow(VRMSWindow(Connection))
-
-
-currentWindow = None
-def showWindow(windowFunction):
-    global currentWindow
-
-    if currentWindow is not None:
-        currentWindow.destroy()
-
-    currentWindow = windowFunction
-    currentWindow.pack(expand="true")
-
-def loginWindow():
-    loginWindow = tk.Frame(root)
-
-    loginWindow.loginLabel = tk.Label(loginWindow, text="Login")
-    loginWindow.loginLabel.pack()
-
-    loginWindow.usernameLabel = tk.Label(loginWindow, text="Username")
-    loginWindow.usernameLabel.pack()
-    loginWindow.usernameEntry = tk.Entry(loginWindow)
-    loginWindow.usernameEntry.pack()
-
-    loginWindow.passwordLabel = tk.Label(loginWindow, text="Password")
-    loginWindow.passwordLabel.pack()
-    loginWindow.passwordEntry = tk.Entry(loginWindow, show="*")
-    loginWindow.passwordEntry.pack()
-
-    loginWindow.loginButton = tk.Button(loginWindow, text="Login", command=lambda: login(loginWindow))
-    loginWindow.loginButton.pack()
-
-    return loginWindow
-
-def VRMSWindow(Connection):
-
-    if not Connection.is_connected:
-        return None
-
-    vrmsWindow = tk.Frame(root)
-
-    vrmsWindow.label = tk.Label(text="label")
-    vrmsWindow.label.pack()
-
-    vrmsWindow.entry_license = tk.Entry(vrmsWindow)
-    vrmsWindow.entry_license.grid(row=1, column=1)
-    vrmsWindow.plateWindow = tk.Label(vrmsWindow, text="License Plate").grid(row=1, column=0)
-
-    vrmsWindow.entry_make = tk.Entry(vrmsWindow)
-    vrmsWindow.entry_make.grid(row=2, column=1)
-    vrmsWindow.makeLabel = tk.Label(vrmsWindow, text="Make").grid(row=2, column=0)
-
-    vrmsWindow.entry_model = tk.Entry(vrmsWindow)
-    vrmsWindow.entry_model.grid(row=3, column=1)
-    vrmsWindow.modelLabel = tk.Label(vrmsWindow, text="Model").grid(row=3, column=0)
-
-    vrmsWindow.entry_year = tk.Entry(vrmsWindow)
-    vrmsWindow.entry_year.grid(row=4, column=1)
-    vrmsWindow.yearLabel = tk.Label(vrmsWindow, text="Year").grid(row=4, column=0)
-
-    vrmsWindow.entry_color = tk.Entry(vrmsWindow)
-    vrmsWindow.entry_color.grid(row=5, column=1)
-    vrmsWindow.colorLabel = tk.Label(vrmsWindow, text="Color").grid(row=5, column=0)
-
-    vrmsWindow.entry_rate = tk.Entry(vrmsWindow)
-    vrmsWindow.entry_rate.grid(row=6, column=1)
-    vrmsWindow.dailyRateLabel = tk.Label(vrmsWindow, text="Daily Rate").grid(row=6, column=0)
-
-    vrmsWindow.entry_mileage = tk.Entry(vrmsWindow)
-    vrmsWindow.entry_mileage.grid(row=7, column=1)
-    vrmsWindow.milageLabel = tk.Label(vrmsWindow, text="Mileage").grid(row=7, column=0)
-
-    vrmsWindow.entry_type = tk.Entry(vrmsWindow)
-    vrmsWindow.entry_type.grid(row=8, column=1)
-    vrmsWindow.idLabel = tk.Label(vrmsWindow, text="Vehicle Type ID").grid(row=8, column=0)
-
-    vrmsWindow.entry_branch = tk.Entry(vrmsWindow)
-    vrmsWindow.entry_branch.grid(row=9, column=1)
-    vrmsWindow.bIdLabel = tk.Label(vrmsWindow, text="Branch ID").grid(row=9, column=0)
-
-    #
-    vrmsWindow.insertButton = tk.Button(vrmsWindow, text="Insert Vehicle", command=insert_vehicle).grid(row=10, column=1)
-
-    # -------- RENTAL AGREEMENTS --------
-    vrmsWindow.cIdLabel = tk.Label(vrmsWindow, text="Customer ID").grid(row=11, column=0)
-
-    vrmsWindow.entry_customer = tk.Entry(vrmsWindow)
-    vrmsWindow.entry_customer.grid(row=11, column=1)
-
-    vrmsWindow.agreementsButton = tk.Button(vrmsWindow, text="Show Agreements", command=get_agreements).grid(row=12, column=1)
-
-    vrmsWindow.text_output = tk.Text(vrmsWindow, height=10, width=50)
-    vrmsWindow.text_output.grid(row=13, column=0, columnspan=2)
-
-    return vrmsWindow
-
-
-
-
 # -------------------------------
 # GUI SETUP
 # -------------------------------
 root = tk.Tk()
 root.title("VRMS System")
-
-
-# ------- LOGIN ---------
-showWindow(loginWindow())
-root.mainloop()
 
 # -------- VEHICLE INPUT --------
 tk.Label(root, text="Insert Vehicle").grid(row=0, column=0)
@@ -285,10 +167,6 @@ text_output = tk.Text(root, height=10, width=50)
 text_output.grid(row=13, column=0, columnspan=2)
 
 root.mainloop()
-
-vrmsWindow = tk.Frame(root)
-
-tk.Label(vrmsWindow, text="Insert Vehicle").grid(row=0, column=0)
 
 
 
