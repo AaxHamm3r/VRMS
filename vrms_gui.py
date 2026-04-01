@@ -20,7 +20,7 @@ def connect_db():
     return mysql.connector.connect(
         host="localhost",
         user="root",        
-        password="Unocard123!",
+        password="*!",
         database="VRMS",
     )
 print("Connected to database successfully")  
